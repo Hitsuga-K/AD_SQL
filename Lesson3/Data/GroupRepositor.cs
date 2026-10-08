@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Dapper;
 using College_DB.Models;
 using Microsoft.Data.SqlClient;
 
@@ -19,25 +17,23 @@ namespace College_DB.Data
 
         public List<Group> GetAllGroups()
         {
-            var groups = new List<Group>();
-            using (SqlConnection connection = new SqlConnection(_conn_str))
+            using (var connection = new SqlConnection(_conn_str))
             {
-                connection.Open();
-                string sql = "SELECT GroupId, GroupName FROM Groups";
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        groups.Add(new Group
-                        {
-                            GroupId = reader.GetInt32(0),
-                            GroupName = reader.GetString(1)
-                        });
-                    }
-                }
+                return connection.Query<Group>(
+                    "SELECT GroupId, GroupName FROM Groups"
+                ).ToList();
             }
-            return groups;
+        }
+
+        public Group GetGroupById(int id)
+        {
+            using (var connection = new SqlConnection(_conn_str))
+            {
+                return connection.QueryFirstOrDefault<Group>(
+                    "SELECT GroupId, GroupName FROM Groups WHERE GroupId = @Id",
+                    new { @Id = id }
+                );
+            }
         }
     }
 }
