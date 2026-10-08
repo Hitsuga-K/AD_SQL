@@ -11,11 +11,11 @@ namespace College_DB.Models
     public class Student
     {
 
-        static int StudentId { get; set; }
-        static string FirstName { get; set; }
-        static string LastName { get; set; }
+        public int StudentId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
-        static int Age { get; set; }
+        public int Age { get; set; }
         
         public override string ToString()
         {

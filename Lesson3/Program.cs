@@ -1,6 +1,5 @@
 ﻿using System;
 using College_DB.Data;
-using Microsoft.Data.SqlClient;
 
 namespace College_DB
 {
@@ -12,16 +11,16 @@ namespace College_DB
             "TrustServerCertificate=True;";
 
         static StudentRepository student_repo = new StudentRepository(conn_str);
+        static GroupRepository group_repo = new GroupRepository(conn_str);
+
         static void Main(string[] args)
         {
             while (true)
             {
                 Console.Clear();
                 Console.WriteLine("=== Меню ===");
-                Console.WriteLine("1 - Добавить студента");
-                Console.WriteLine("2 - Добавить группу");
-                Console.WriteLine("3 - Показать всех студентов");
-                Console.WriteLine("4 - Показать студентов из группы");
+                Console.WriteLine("1 - Показать всех студентов");
+                Console.WriteLine("2 - Показать все группы");
                 Console.WriteLine("0 - Выход");
                 Console.Write("Выберите действие: ");
 
@@ -30,75 +29,26 @@ namespace College_DB
                 switch (choice)
                 {
                     case "1":
-                        Console.Write("Введите имя: ");
-                        string firstName = Console.ReadLine();
-                        Console.Write("Введите фамилию: ");
-                        string lastName = Console.ReadLine();
-                        Console.Write("Введите возраст: ");
-                        string age = Console.ReadLine();
-                        Console.Write("Введите ID группы: ");
-                        string groupId = Console.ReadLine();
-                        //AddStudents(conn_str, firstName, lastName, age, groupId);
-                        Console.WriteLine("Студент добавлен.");
-                        break;
-
-                    case "2":
-                        Console.Write("Введите название группы: ");
-                        string groupName = Console.ReadLine();
-                        //AddGroup(conn_str, groupName);
-                        Console.WriteLine("Группа добавлена.");
-                        break;
-
-                    case "3":
                         ShowAllStudent(conn_str);
                         break;
 
-                    case "4":
-                        Console.Write("Введите ID группы: ");
-                        int groupIdForSearch = int.Parse(Console.ReadLine());
-                        //ShowStudentFromGroup(conn_str, groupIdForSearch);
+                    case "2":
+                        ShowAllGroups(conn_str);
                         break;
 
                     case "0":
                         return;
 
                     default:
-                        Console.WriteLine("Неверный выбор. Попробуйте снова.");
+                        Console.WriteLine("не та команда");
                         break;
                 }
 
-                Console.WriteLine("Нажмите любую клавишу для продолжения...");
+                Console.WriteLine("Продолжить");
                 Console.ReadKey();
             }
         }
 
-
-        static void AddGroup(string conn_str, string name)
-        {
-            SqlConnection connection = new SqlConnection(conn_str);
-            connection.Open();
-            string sql = "INSERT INTO dbo.Groups (GroupName) VALUES (@name)";
-            SqlCommand command = new SqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@name", name);
-            command.ExecuteNonQuery();
-            connection.Close();
-
-        }
-        static void AddStudents(string conn_str, string first_name, string last_name, string age, string group_id)
-        {
-            SqlConnection connection = new SqlConnection(conn_str);
-            connection.Open();
-            string sql = "INSERT INTO dbo.Students(FirstName, LastName, Age, GroupId)" +
-                "VALUES(@firstname, @lastName, @age, @groupid)";
-            SqlCommand command = new SqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@firstname", first_name);
-            command.Parameters.AddWithValue("@lastName", last_name);
-            command.Parameters.AddWithValue("@age", age);
-            command.Parameters.AddWithValue("@groupid", group_id);
-            command.ExecuteNonQuery();
-            connection.Close();
-
-        }
         static void ShowAllStudent(string conn_str)
         {
             var students = student_repo.GetAllStudent();
@@ -106,20 +56,15 @@ namespace College_DB
             {
                 Console.WriteLine(student.ToString());
             }
-
-            
         }
-        static void ShowStudentFromGroup(string conn_str, int id)
+
+        static void ShowAllGroups(string conn_str)
         {
-            SqlConnection connection = new SqlConnection(conn_str);
-            connection.Open();
-            string sql = "SELECT s.StudentId, s.LastName, s.FirstName" +
-                "FROM dbo.Students AS s" +
-                "WHERE s.GroupId = @id";
-            SqlCommand command = new SqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@id", id);
-            command.ExecuteNonQuery();
-            connection.Close();
+            var groups = group_repo.GetAllGroups();
+            foreach (var group in groups)
+            {
+                Console.WriteLine(group.ToString());
+            }
         }
     }
 }
