@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Студенты и группы</title>
+</head>
+<body>
+    <h1>Студенты</h1>
+
+    <button onclick="loadStudents()">Обновить студентов</button>
+
+    <p id="error"></p>
+
+    <table id="studentsTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Возраст</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h1>Группы</h1>
+
+    <button onclick="loadGroups()">Обновить группы</button>
+
+    <p id="errorGroups"></p>
+
+    <table id="groupsTable" style="display: none;">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Название группы</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="js/routers.js"></script>
+</body>
+</html>

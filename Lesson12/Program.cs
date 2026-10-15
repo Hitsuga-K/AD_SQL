@@ -40,6 +40,7 @@ app.MapGet("groups/all", () =>
 });
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
