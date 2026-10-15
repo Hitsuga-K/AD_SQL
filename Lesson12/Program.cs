@@ -10,6 +10,7 @@ string connectyion_string = "Data Source=COMP11A1\\SQLEXPRESS;" +
             "Integrated Security=True;" +
             "TrustServerCertificate=True;";
 StudentRepository stud_repo = new StudentRepository(connectyion_string);
+GroupRepository group_repo = new GroupRepository(connectyion_string);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton(stud_repo);
@@ -30,6 +31,12 @@ app.MapGet("students/all", () =>
 {
     var students = stud_repo.GetAllStudent2();
     return Results.Ok(students);
+});
+
+app.MapGet("groups/all", () =>
+{
+    var group = group_repo.GetAllGroups();
+    return Results.Ok(group);
 });
 
 app.UseHttpsRedirection();
