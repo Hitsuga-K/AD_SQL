@@ -1,0 +1,1238 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INAZUMA — College Database</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+        :root {
+            --purple: #7540ad;
+            --purple-dark: #48246e;
+            --ink: #211d2b;
+            --gray: #77717e;
+            --paper: #f2f0f1;
+            --white: #fff;
+            --line: #c9c3ce;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--ink);
+            background: radial-gradient(ellipse at 20% 10%, rgba(255,255,255,.9), transparent 55%), repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(50,30,60,.018) 4px), #e9e6eb;
+            min-height: 100vh;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 230px;
+            flex-shrink: 0;
+            background: #f8f7f7;
+            border-right: 1px solid #c9c3ce;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            padding: 30px 22px;
+            border-bottom: 1px solid var(--line);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .logo::before {
+                content: "雷";
+                position: absolute;
+                right: -5px;
+                top: -20px;
+                font-size: 100px;
+                color: rgba(117,64,173,.09);
+            }
+
+        .logo-mark {
+            color: var(--purple);
+            font-size: 35px;
+            font-weight: 900;
+            letter-spacing: -3px;
+        }
+
+        .logo-sub {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            margin-top: 4px;
+        }
+
+        .logo-caption {
+            color: var(--gray);
+            font-size: 9px;
+            letter-spacing: 2px;
+            margin-top: 9px;
+        }
+
+        .menu-label {
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--gray);
+            font-weight: 800;
+            padding: 25px 20px 12px;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            width: 100%;
+            border: 0;
+            border-bottom: 1px solid #e0dce2;
+            background: transparent;
+            color: var(--ink);
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 800;
+            transition: .15s;
+            position: relative;
+        }
+
+            .nav-button:hover {
+                background: #eee9f2;
+                color: var(--purple);
+            }
+
+            .nav-button.active {
+                background: var(--purple);
+                color: white;
+            }
+
+        .nav-icon {
+            font-size: 17px;
+            width: 22px;
+            text-align: center;
+        }
+
+        .nav-number {
+            margin-left: auto;
+            font-size: 9px;
+            opacity: .55;
+        }
+
+        .sidebar-art {
+            margin-top: auto;
+            min-height: 190px;
+            padding: 20px;
+            background: linear-gradient(145deg, transparent 45%, rgba(117,64,173,.15) 45% 49%, transparent 49%), #e5e1e8;
+            border-top: 1px solid var(--line);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .sidebar-art::before {
+                content: "永";
+                font-size: 120px;
+                font-weight: 900;
+                color: rgba(117,64,173,.2);
+                position: absolute;
+                right: 5px;
+                bottom: -15px;
+            }
+
+            .sidebar-art p {
+                position: relative;
+                font-size: 9px;
+                font-weight: 800;
+                letter-spacing: 2px;
+                line-height: 1.8;
+            }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 25px 30px 40px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .top-eyebrow {
+            color: var(--purple);
+            font-size: 9px;
+            letter-spacing: 4px;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        .topbar h1 {
+            font-size: clamp(23px, 3vw, 35px);
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            text-transform: uppercase;
+        }
+
+        .topbar p {
+            font-size: 10px;
+            color: var(--gray);
+            margin-top: 7px;
+            letter-spacing: 1px;
+        }
+
+        .system-status {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            padding: 10px 13px;
+            border: 1px solid var(--line);
+            background: #f8f7f7;
+            white-space: nowrap;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+            padding: 30px;
+            border: 1px solid #c9c3ce;
+            background: linear-gradient(125deg, transparent 60%, rgba(117,64,173,.18) 60% 67%, transparent 67%), repeating-linear-gradient(135deg, #f8f7f7 0 12px, #efedf0 13px 14px);
+        }
+
+            .hero::after {
+                content: "雷電";
+                position: absolute;
+                right: 8%;
+                top: 15px;
+                color: rgba(117,64,173,.13);
+                font-size: clamp(80px, 15vw, 180px);
+                font-weight: 900;
+                letter-spacing: -15px;
+            }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 580px;
+        }
+
+        .hero-kicker {
+            color: var(--purple);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+        }
+
+        .hero h2 {
+            font-size: clamp(36px, 6vw, 76px);
+            line-height: .95;
+            font-weight: 900;
+            letter-spacing: -4px;
+            text-transform: uppercase;
+        }
+
+        .hero h3 {
+            font-size: 17px;
+            letter-spacing: 7px;
+            margin-top: 8px;
+            color: var(--purple);
+        }
+
+        .hero-description {
+            max-width: 420px;
+            margin-top: 17px;
+            font-size: 9px;
+            line-height: 1.9;
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: #59525e;
+        }
+
+        .hero-symbol {
+            position: absolute;
+            right: 6%;
+            bottom: -28px;
+            font-size: 210px;
+            color: rgba(117,64,173,.12);
+            font-weight: 900;
+        }
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 27px;
+        }
+
+        .stat {
+            min-height: 120px;
+            padding: 15px;
+            background: #f9f8f8;
+            border: 1px solid #bdb6c4;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .stat::after {
+                content: "✿";
+                position: absolute;
+                right: 8px;
+                bottom: -20px;
+                font-size: 75px;
+                color: rgba(117,64,173,.12);
+            }
+
+        .stat-label {
+            color: var(--purple);
+            font-size: 9px;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        .stat-value {
+            font-size: 34px;
+            font-weight: 900;
+            margin-top: 9px;
+        }
+
+        .stat-caption {
+            font-size: 8px;
+            color: var(--gray);
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* SECTIONS */
+
+        .section {
+            display: none;
+        }
+
+            .section.active {
+                display: block;
+                animation: appear .2s ease;
+            }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0 18px;
+        }
+
+            .section-heading .flower {
+                font-size: 32px;
+                color: var(--purple);
+            }
+
+            .section-heading h2 {
+                font-size: 25px;
+                font-weight: 900;
+                letter-spacing: -1px;
+                text-transform: uppercase;
+            }
+
+            .section-heading .number {
+                color: var(--purple);
+                font-size: 11px;
+                font-weight: 800;
+                letter-spacing: 2px;
+                padding-left: 10px;
+                border-left: 1px solid var(--purple);
+            }
+
+        .heading-line {
+            height: 1px;
+            background: #aaa1b2;
+            flex: 1;
+        }
+
+        /* CONTENT GRID */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(290px, .9fr);
+            gap: 15px;
+            align-items: start;
+        }
+
+        .panel {
+            background: rgba(250,249,249,.88);
+            border: 1px solid #bdb6c4;
+            padding: 17px;
+            min-width: 0;
+            position: relative;
+        }
+
+        .panel-title {
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 16px;
+        }
+
+        .panel-subtitle {
+            color: var(--gray);
+            font-size: 9px;
+            margin-top: -10px;
+            margin-bottom: 17px;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 13px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            min-width: 0;
+        }
+
+            .field.full {
+                grid-column: 1 / -1;
+            }
+
+            .field label {
+                font-size: 9px;
+                font-weight: 800;
+                color: #514957;
+            }
+
+            .field input {
+                min-width: 0;
+                width: 100%;
+                padding: 11px;
+                border: 1px solid #bcb5c2;
+                background: #fff;
+                outline: none;
+                color: var(--ink);
+                font-size: 11px;
+                border-radius: 0;
+            }
+
+                .field input:focus {
+                    border: 1px solid var(--purple);
+                    box-shadow: inset 3px 0 var(--purple);
+                }
+
+                .field input::placeholder {
+                    color: #a39ba8;
+                }
+
+        .form-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 17px;
+        }
+
+        /* BUTTONS */
+
+        .btn {
+            border: 1px solid #8d8296;
+            background: transparent;
+            color: var(--ink);
+            padding: 11px 14px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            transition: .15s;
+        }
+
+            .btn:hover {
+                background: #eee9f2;
+                border-color: var(--purple);
+                color: var(--purple-dark);
+            }
+
+        .btn-primary {
+            background: var(--purple);
+            border-color: var(--purple);
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background: var(--purple-dark);
+                color: white;
+            }
+
+        .btn-danger {
+            color: #a42e4b;
+            border-color: #c58a98;
+        }
+
+        /* TABLE */
+
+        .table-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .search {
+            width: min(280px, 100%);
+            padding: 10px 12px;
+            background: white;
+            border: 1px solid #bdb6c4;
+            outline: none;
+            font-size: 10px;
+            color: var(--ink);
+        }
+
+            .search:focus {
+                border-color: var(--purple);
+            }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #c8c1cc;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 550px;
+            font-size: 10px;
+        }
+
+        thead {
+            background: #e5dfe9;
+        }
+
+        th {
+            padding: 12px 10px;
+            text-align: left;
+            color: #30283a;
+            font-size: 9px;
+            font-weight: 900;
+            white-space: nowrap;
+            border-right: 1px solid #c8c1cc;
+        }
+
+        td {
+            padding: 11px 10px;
+            border-top: 1px solid #d7d1da;
+            border-right: 1px solid #e1dce3;
+            color: #403947;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0edf1;
+        }
+
+        tbody tr:hover {
+            background: #e9e0f0;
+        }
+
+        td button {
+            border: 1px solid #9c8ca9;
+            background: #fff;
+            color: var(--purple-dark);
+            padding: 6px 8px;
+            font-size: 10px;
+            margin: 2px;
+        }
+
+            td button:hover {
+                background: var(--purple);
+                color: white;
+            }
+
+        .error {
+            color: #b52d4d;
+            font-size: 10px;
+            margin-top: 12px;
+        }
+
+        .record-count {
+            color: var(--gray);
+            font-size: 9px;
+            letter-spacing: 1px;
+        }
+
+            .record-count b {
+                color: var(--purple);
+            }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #c9c3ce;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            color: var(--gray);
+            font-size: 8px;
+            letter-spacing: 2px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1100px) {
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                padding: 20px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .app {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .logo {
+                padding: 15px 20px;
+            }
+
+            .logo-mark {
+                font-size: 27px;
+            }
+
+            .menu-label {
+                padding: 13px 15px 8px;
+            }
+
+            .navigation {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .nav-button {
+                padding: 12px 7px;
+                justify-content: center;
+                gap: 5px;
+                font-size: 9px;
+                border-right: 1px solid #e0dce2;
+            }
+
+            .nav-number, .sidebar-art {
+                display: none;
+            }
+
+            .main {
+                padding: 18px 12px;
+            }
+
+            .hero {
+                min-height: 170px;
+                padding: 20px;
+            }
+
+            .hero-symbol {
+                font-size: 130px;
+                right: 2%;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .section-heading h2 {
+                font-size: 19px;
+            }
+
+            .system-status {
+                font-size: 0;
+            }
+        }
+
+        @media (max-width: 390px) {
+            .navigation {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .topbar h1 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-mark">RAIDEN</div>
+                <div class="logo-sub">COLLEGE DATABASE</div>
+                <div class="logo-caption">EYE OF GOD: ELECTRO</div>
+            </div>
+
+            <div class="menu-label">НАВИГАЦИЯ</div>
+
+            <nav class="navigation">
+                <button class="nav-button active" data-section="dashboard">
+                    <span class="nav-icon">✿</span> ГЛАВНАЯ <span class="nav-number">01</span>
+                </button>
+                <button class="nav-button" data-section="students">
+                    <span class="nav-icon">♟</span> СТУДЕНТЫ <span class="nav-number">02</span>
+                </button>
+                <button class="nav-button" data-section="groups">
+                    <span class="nav-icon">♣</span> ГРУППЫ <span class="nav-number">03</span>
+                </button>
+                <button class="nav-button" data-section="subjects">
+                    <span class="nav-icon">▣</span> ПРЕДМЕТЫ <span class="nav-number">04</span>
+                </button>
+                <button class="nav-button" data-section="teachers">
+                    <span class="nav-icon">♙</span> ПРЕПОДАВАТЕЛИ <span class="nav-number">05</span>
+                </button>
+                <button class="nav-button" data-section="grades">
+                    <span class="nav-icon">▤</span> ОЦЕНКИ <span class="nav-number">06</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-art">
+                <p>✦ ETERNITY ✦</p>
+                <p>EYE OF GOD: ELECTRO</p>
+                <p>WEAPON: SPEAR</p>
+                <p>INAZUMA DATABASE</p>
+            </div>
+        </aside>
+
+        <main class="main">
+
+            <header class="topbar">
+                <div>
+                    <div class="top-eyebrow">雷電 · INAZUMA</div>
+                    <h1 id="pageTitle">College Database</h1>
+                    <p>УПРАВЛЕНИЕ КОЛЛЕДЖЕМ · ПОРЯДОК · ЗНАНИЯ · РАЗВИТИЕ</p>
+                </div>
+                <div class="system-status">✦ SYSTEM ONLINE</div>
+            </header>
+
+            <!-- DASHBOARD -->
+
+            <section class="section active" id="dashboard">
+
+                <div class="hero">
+                    <div class="hero-content">
+                        <div class="hero-kicker">WELCOME TO INAZUMA</div>
+                        <h2>COLLEGE</h2>
+                        <h3>DATABASE</h3>
+                        <p class="hero-description">
+                            ПОРЯДОК. ЗНАНИЕ. РАЗВИТИЕ.<br>
+                            ВСЕ ДАННЫЕ В ОДНОЙ СИСТЕМЕ.<br>
+                            ДЛЯ ЭФФЕКТИВНОГО УПРАВЛЕНИЯ КОЛЛЕДЖЕМ.
+                        </p>
+                    </div>
+                    <div class="hero-symbol">雷</div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-label">✿ СТУДЕНТЫ</div>
+                        <div class="stat-value" id="studentCount">—</div>
+                        <div class="stat-caption">ВСЕГО ЗАПИСЕЙ</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">✿ ГРУППЫ</div>
+                        <div class="stat-value" id="groupCount">—</div>
+                        <div class="stat-caption">УЧЕБНЫХ ГРУПП</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">▣ ПРЕДМЕТЫ</div>
+                        <div class="stat-value" id="subjectCount">—</div>
+                        <div class="stat-caption">ДИСЦИПЛИН</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">♙ ПРЕПОДАВАТЕЛИ</div>
+                        <div class="stat-value" id="teacherCount">—</div>
+                        <div class="stat-caption">СОТРУДНИКОВ</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">★ ОЦЕНКИ</div>
+                        <div class="stat-value" id="gradeCount">—</div>
+                        <div class="stat-caption">ВСЕГО ОЦЕНОК</div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-title">✿ БЫСТРЫЙ ДОСТУП</div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="showSection('students')">СТУДЕНТЫ</button>
+                        <button class="btn" onclick="showSection('groups')">ГРУППЫ</button>
+                        <button class="btn" onclick="showSection('subjects')">ПРЕДМЕТЫ</button>
+                        <button class="btn" onclick="showSection('teachers')">ПРЕПОДАВАТЕЛИ</button>
+                        <button class="btn" onclick="showSection('grades')">ОЦЕНКИ</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STUDENTS -->
+
+            <section class="section" id="students">
+                <div class="section-heading">
+                    <span class="flower">✿</span>
+                    <h2>СТУДЕНТЫ</h2>
+                    <span class="number">/ 01</span>
+                    <div class="heading-line"></div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-title">СПИСОК СТУДЕНТОВ</div>
+                        <div class="table-tools">
+                            <input class="search" placeholder="⌕ Поиск студента..." oninput="filterTable(this,'studentsTable')">
+                            <button class="btn btn-primary" onclick="loadData('students')">↻ ОБНОВИТЬ</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="studentsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>ИМЯ</th>
+                                        <th>ФАМИЛИЯ</th>
+                                        <th>ВОЗРАСТ</th>
+                                        <th>ID ГРУППЫ</th>
+                                        <th>ДЕЙСТВИЯ</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <p class="record-count">ВСЕГО ЗАПИСЕЙ: <b id="studentsTotal">0</b></p>
+                        <p id="studentsError" class="error"></p>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-title">ДОБАВИТЬ / ИЗМЕНИТЬ СТУДЕНТА</div>
+                        <form id="studentForm" data-type="students">
+                            <input type="hidden" name="id">
+                            <div class="form-grid">
+                                <div class="field">
+                                    <label>ID (ДЛЯ ИЗМЕНЕНИЯ)</label>
+                                    <input type="number" name="id" placeholder="ID">
+                                </div>
+                                <div class="field">
+                                    <label>ИМЯ</label>
+                                    <input name="firstName" placeholder="Имя" required>
+                                </div>
+                                <div class="field">
+                                    <label>ФАМИЛИЯ</label>
+                                    <input name="lastName" placeholder="Фамилия" required>
+                                </div>
+                                <div class="field">
+                                    <label>ВОЗРАСТ</label>
+                                    <input type="number" name="age" placeholder="Возраст" required>
+                                </div>
+                                <div class="field full">
+                                    <label>ID ГРУППЫ</label>
+                                    <input type="number" name="groupId" placeholder="Номер группы" required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" type="submit">✿ СОХРАНИТЬ</button>
+                                <button class="btn" type="button" onclick="clearForm('studentForm')">▤ ОЧИСТИТЬ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GROUPS -->
+
+            <section class="section" id="groups">
+                <div class="section-heading">
+                    <span class="flower">✿</span><h2>ГРУППЫ</h2>
+                    <span class="number">/ 02</span><div class="heading-line"></div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-title">СПИСОК ГРУПП</div>
+                        <div class="table-tools">
+                            <input class="search" placeholder="⌕ Поиск группы..." oninput="filterTable(this,'groupsTable')">
+                            <button class="btn btn-primary" onclick="loadData('groups')">↻ ОБНОВИТЬ</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="groupsTable">
+                                <thead><tr><th>ID</th><th>НАЗВАНИЕ ГРУППЫ</th><th>ДЕЙСТВИЯ</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <p class="record-count">ВСЕГО ЗАПИСЕЙ: <b id="groupsTotal">0</b></p>
+                        <p id="groupsError" class="error"></p>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-title">ДОБАВИТЬ / ИЗМЕНИТЬ ГРУППУ</div>
+                        <form id="groupForm" data-type="groups">
+                            <div class="form-grid">
+                                <div class="field full">
+                                    <label>ID (ДЛЯ ИЗМЕНЕНИЯ)</label>
+                                    <input type="number" name="id" placeholder="ID">
+                                </div>
+                                <div class="field full">
+                                    <label>НАЗВАНИЕ ГРУППЫ</label>
+                                    <input name="groupName" placeholder="Например, ИС-21" required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" type="submit">✿ СОХРАНИТЬ</button>
+                                <button class="btn" type="button" onclick="clearForm('groupForm')">▤ ОЧИСТИТЬ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SUBJECTS -->
+
+            <section class="section" id="subjects">
+                <div class="section-heading">
+                    <span class="flower">✿</span><h2>ПРЕДМЕТЫ</h2>
+                    <span class="number">/ 03</span><div class="heading-line"></div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-title">СПИСОК ПРЕДМЕТОВ</div>
+                        <div class="table-tools">
+                            <input class="search" placeholder="⌕ Поиск предмета..." oninput="filterTable(this,'subjectsTable')">
+                            <button class="btn btn-primary" onclick="loadData('subjects')">↻ ОБНОВИТЬ</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="subjectsTable">
+                                <thead><tr><th>ID</th><th>ПРЕДМЕТ</th><th>ID ПРЕПОДАВАТЕЛЯ</th><th>ДЕЙСТВИЯ</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <p class="record-count">ВСЕГО ЗАПИСЕЙ: <b id="subjectsTotal">0</b></p>
+                        <p id="subjectsError" class="error"></p>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-title">ДОБАВИТЬ / ИЗМЕНИТЬ ПРЕДМЕТ</div>
+                        <form id="subjectForm" data-type="subjects">
+                            <div class="form-grid">
+                                <div class="field full">
+                                    <label>ID (ДЛЯ ИЗМЕНЕНИЯ)</label>
+                                    <input type="number" name="id" placeholder="ID">
+                                </div>
+                                <div class="field full">
+                                    <label>НАЗВАНИЕ ПРЕДМЕТА</label>
+                                    <input name="subjectName" placeholder="Название предмета" required>
+                                </div>
+                                <div class="field full">
+                                    <label>ID ПРЕПОДАВАТЕЛЯ</label>
+                                    <input type="number" name="teacherId" placeholder="ID преподавателя">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" type="submit">✿ СОХРАНИТЬ</button>
+                                <button class="btn" type="button" onclick="clearForm('subjectForm')">▤ ОЧИСТИТЬ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEACHERS -->
+
+            <section class="section" id="teachers">
+                <div class="section-heading">
+                    <span class="flower">✿</span><h2>ПРЕПОДАВАТЕЛИ</h2>
+                    <span class="number">/ 04</span><div class="heading-line"></div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-title">СПИСОК ПРЕПОДАВАТЕЛЕЙ</div>
+                        <div class="table-tools">
+                            <input class="search" placeholder="⌕ Поиск преподавателя..." oninput="filterTable(this,'teachersTable')">
+                            <button class="btn btn-primary" onclick="loadData('teachers')">↻ ОБНОВИТЬ</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="teachersTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>ИМЯ</th>
+                                        <th>ФАМИЛИЯ</th>
+                                        <th>ВОЗРАСТ</th>
+                                        <th>ID ПРЕДМЕТА</th>
+                                        <th>ДЕЙСТВИЯ</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <p class="record-count">ВСЕГО ЗАПИСЕЙ: <b id="teachersTotal">0</b></p>
+                        <p id="teachersError" class="error"></p>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-title">ДОБАВИТЬ / ИЗМЕНИТЬ ПРЕПОДАВАТЕЛЯ</div>
+                        <form id="teacherForm" data-type="teachers">
+                            <div class="form-grid">
+                                <div class="field">
+                                    <label>ID (ДЛЯ ИЗМЕНЕНИЯ)</label>
+                                    <input type="number" name="id" placeholder="ID">
+                                </div>
+                                <div class="field">
+                                    <label>ИМЯ</label>
+                                    <input name="firstName" placeholder="Имя" required>
+                                </div>
+                                <div class="field">
+                                    <label>ФАМИЛИЯ</label>
+                                    <input name="lastName" placeholder="Фамилия" required>
+                                </div>
+                                <div class="field">
+                                    <label>ВОЗРАСТ</label>
+                                    <input type="number" name="age" placeholder="Возраст" required>
+                                </div>
+                                <div class="field full">
+                                    <label>ID ПРЕДМЕТА</label>
+                                    <input type="number" name="subjectId" placeholder="ID предмета">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" type="submit">✿ СОХРАНИТЬ</button>
+                                <button class="btn" type="button" onclick="clearForm('teacherForm')">▤ ОЧИСТИТЬ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GRADES -->
+
+            <section class="section" id="grades">
+                <div class="section-heading">
+                    <span class="flower">✿</span><h2>ОЦЕНКИ</h2>
+                    <span class="number">/ 05</span><div class="heading-line"></div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="panel">
+                        <div class="panel-title">ЖУРНАЛ ОЦЕНОК</div>
+                        <div class="table-tools">
+                            <input class="search" placeholder="⌕ Поиск оценки..." oninput="filterTable(this,'gradesTable')">
+                            <button class="btn btn-primary" onclick="loadData('grades')">↻ ОБНОВИТЬ</button>
+                        </div>
+                        <div class="table-wrap">
+                            <table id="gradesTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>ID СТУДЕНТА</th>
+                                        <th>ID ПРЕДМЕТА</th>
+                                        <th>ID ПРЕПОДАВАТЕЛЯ</th>
+                                        <th>ОЦЕНКА</th>
+                                        <th>ДАТА</th>
+                                        <th>ДЕЙСТВИЯ</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <p class="record-count">ВСЕГО ЗАПИСЕЙ: <b id="gradesTotal">0</b></p>
+                        <p id="gradesError" class="error"></p>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-title">ДОБАВИТЬ / ИЗМЕНИТЬ ОЦЕНКУ</div>
+                        <form id="gradeForm" data-type="grades">
+                            <div class="form-grid">
+                                <div class="field full">
+                                    <label>ID (ДЛЯ ИЗМЕНЕНИЯ)</label>
+                                    <input type="number" name="id" placeholder="ID">
+                                </div>
+                                <div class="field">
+                                    <label>ID СТУДЕНТА</label>
+                                    <input type="number" name="studentId" placeholder="ID студента" required>
+                                </div>
+                                <div class="field">
+                                    <label>ID ПРЕДМЕТА</label>
+                                    <input type="number" name="subjectId" placeholder="ID предмета" required>
+                                </div>
+                                <div class="field">
+                                    <label>ID ПРЕПОДАВАТЕЛЯ</label>
+                                    <input type="number" name="teacherId" placeholder="ID преподавателя" required>
+                                </div>
+                                <div class="field">
+                                    <label>ОЦЕНКА</label>
+                                    <input type="number" name="gradeValue" placeholder="Оценка" min="1" max="5" required>
+                                </div>
+                                <div class="field full">
+                                    <label>ДАТА</label>
+                                    <input type="date" name="gradeDate" required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary" type="submit">✿ СОХРАНИТЬ</button>
+                                <button class="btn" type="button" onclick="clearForm('gradeForm')">▤ ОЧИСТИТЬ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <span>INAZUMA · COLLEGE DATABASE</span>
+                <span>✦ ETERNITY ✦</span>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="js/routers.js"></script>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.toggle('active', button.dataset.section === id);
+            });
+
+            document.getElementById(id).classList.add('active');
+
+            const titles = {
+                dashboard: 'College Database',
+                students: 'Студенты',
+                groups: 'Группы',
+                subjects: 'Предметы',
+                teachers: 'Преподаватели',
+                grades: 'Оценки'
+            };
+
+            document.getElementById('pageTitle').textContent = titles[id];
+        }
+
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', () => showSection(button.dataset.section));
+        });
+
+        function filterTable(input, tableId) {
+            const query = input.value.toLowerCase();
+            const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+
+            rows.forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(query)
+                    ? ''
+                    : 'none';
+            });
+        }
+
+        function updateStatistics() {
+            const types = ['students', 'groups', 'subjects', 'teachers', 'grades'];
+
+            types.forEach(type => {
+                const table = document.getElementById(type + 'Table');
+                if (!table) return;
+
+                const count = table.querySelectorAll('tbody tr').length;
+
+                const total = document.getElementById(type + 'Total');
+                if (total) total.textContent = count;
+
+                const statIds = {
+                    students: 'studentCount',
+                    groups: 'groupCount',
+                    subjects: 'subjectCount',
+                    teachers: 'teacherCount',
+                    grades: 'gradeCount'
+                };
+
+                document.getElementById(statIds[type]).textContent = count;
+            });
+        }
+
+        document.querySelectorAll('table tbody').forEach(tbody => {
+            new MutationObserver(updateStatistics).observe(tbody, {
+                childList: true,
+                subtree: true
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', updateStatistics);
+    </script>
+
+</body>
+</html>
